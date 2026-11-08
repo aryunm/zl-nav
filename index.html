@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f1115">
+<title>找书导航</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--line:#2a2f3a;--txt:#e6e9ef;--dim:#9aa3b2;--acc:#6ea8fe;--ok:#4ade80;--bad:#f87171;--warn:#fbbf24}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:14px 12px 40px;background:var(--bg);color:var(--txt);
+ font-family:-apple-system,system-ui,"PingFang SC","Noto Sans CJK SC",Roboto,sans-serif;font-size:15px;line-height:1.5}
+header{padding:6px 4px 14px}
+h1{margin:0;font-size:22px;letter-spacing:.5px}
+.sub{margin:4px 0 0;color:var(--dim);font-size:13px}
+h2{margin:0 0 8px;font-size:15px;color:var(--acc);font-weight:600}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 0 12px}
+.tip{margin:0 0 10px;color:var(--dim);font-size:12.5px}
+button{font:inherit;color:#0b1220;background:var(--acc);border:0;border-radius:10px;padding:9px 14px;font-weight:600}
+button:disabled{opacity:.6}
+button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line);font-weight:500}
+a.link{display:flex;gap:10px;align-items:center;padding:11px 8px;color:var(--txt);text-decoration:none;border-radius:10px}
+a.link:active{background:#20242e}
+a.link+a.link{border-top:1px solid var(--line)}
+.dot{flex:0 0 10px;width:10px;height:10px;border-radius:50%;background:#4b5563;transition:background .2s}
+.dot.ok{background:var(--ok);box-shadow:0 0 8px rgba(74,222,128,.6)}
+.dot.bad{background:var(--bad)}
+.txt{flex:1;min-width:0}
+.name{display:block;font-size:15px}
+.desc{display:block;color:var(--dim);font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arrow{color:#4b5563;font-size:13px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+#q{flex:1;min-width:150px;background:#0f1115;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:10px 12px;font:inherit}
+#q:focus{outline:none;border-color:var(--acc)}
+.sbtn{flex:1 1 45%;background:#232937;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px}
+#sum{margin:8px 0 0;font-size:13px;color:var(--dim)}
+#sum b{color:var(--ok)}
+.warn{color:var(--warn);font-size:12.5px;margin:10px 0 0}
+hr{border:0;border-top:1px solid var(--line);margin:10px 0}
+footer{color:var(--dim);font-size:12px;padding:0 6px;line-height:1.7}
+code{background:#232937;padding:1px 5px;border-radius:5px;font-size:12.5px}
+.tag{display:inline-block;font-size:10.5px;color:#fbbf24;border:1px solid #4a3a10;background:#2a2110;border-radius:5px;padding:0 5px;margin-left:6px;vertical-align:1px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>找书导航</h1>
+  <p class="sub">Z-Library 入口检测 · 高校教材 · 免费正版书库</p>
+</header>
+
+<section>
+  <h2>① Z-Library（先点检测）</h2>
+  <p class="tip">点一下，绿点＝现在这个地址连得上。红点就跳过，换下一个；整片红而你确定能上网时，直接点链接试。</p>
+  <div class="row"><button id="check">检测可用入口</button></div>
+  <p id="sum"></p>
+  <ul style="list-style:none;margin:8px 0 0;padding:0">
+    <a class="link" href="https://z-lib.rest/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://z-lib.rest/"></span>
+      <span class="txt"><span class="name">z-lib.rest<span class="tag">你常用来找站</span></span><span class="desc">入口/找可用地址用</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://library-access.sk/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://library-access.sk/"></span>
+      <span class="txt"><span class="name">Z-Access 官方入口页</span><span class="desc">官方自己维护的"当前可用地址"汇总</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://z-library.sk/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://z-library.sk/"></span>
+      <span class="txt"><span class="name">z-library.sk</span><span class="desc">官方主域名</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://z-lib.fm/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://z-lib.fm/"></span>
+      <span class="txt"><span class="name">z-lib.fm</span><span class="desc">官方备用</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://1lib.sk/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://1lib.sk/"></span>
+      <span class="txt"><span class="name">1lib.sk</span><span class="desc">官方备用</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://z-lib.gl/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://z-lib.gl/"></span>
+      <span class="txt"><span class="name">z-lib.gl</span><span class="desc">官方备用</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://singlelogin.re/" target="_blank" rel="noopener">
+      <span class="dot" data-detect="https://singlelogin.re/"></span>
+      <span class="txt"><span class="name">singlelogin.re</span><span class="desc">老牌登录入口</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://t.me/zlibrary_official" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Telegram 官方频道</span><span class="desc">域名全挂时看这里发的最新地址</span></span><span class="arrow">›</span></a>
+  </ul>
+  <hr>
+  <p class="tip">域名全都不通时，用"神奇邮箱"：随便哪个邮箱，发一封空邮件到这个地址，会自动回你当前可用网址。换域名也不失效。</p>
+  <div class="row">
+    <code>blackbox@zbox.ph</code>
+    <button class="ghost" id="copy" onclick="copyEmail()">复制邮箱</button>
+  </div>
+  <p class="warn">⚠️ 域名会轮换，老名单很快过期；连得上也不等于官方。真假看两点：官方每天给 10 本免费额度、不催你付费。不合这两点的，别付款、别用常用密码。</p>
+</section>
+
+<section>
+  <h2>② 搜一本书</h2>
+  <div class="row">
+    <input id="q" placeholder="书名 / 作者 / ISBN" autocomplete="off">
+  </div>
+  <div class="row">
+    <button class="sbtn" onclick="go('zlib')">Z-Library 搜</button>
+    <button class="sbtn" onclick="go('anna')">Anna's Archive</button>
+    <button class="sbtn" onclick="go('gs')">Google 学术</button>
+    <button class="sbtn" onclick="go('bd')">百度学术</button>
+  </div>
+  <p class="tip" style="margin-top:8px">先查版本：豆瓣页的 ISBN 和"第几版"对上再找，别下错版。</p>
+</section>
+
+<section>
+  <h2>③ 高校资源（命中率最高）</h2>
+  <ul style="list-style:none;margin:0;padding:0">
+    <a class="link" href="https://ds.carsi.edu.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">CARSI 校外访问入口</span><span class="desc">学校统一账号，校外免 VPN 进知网、Springer 等</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.duxiu.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">读秀</span><span class="desc">看不全时按章节"文献传递"，单次最多 50 页发邮箱</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.sslibrary.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">超星汇雅电子书</span><span class="desc">中文教材库，很多书能在线看全文</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://cadal.edu.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">CADAL 大学数字图书馆</span><span class="desc">高校联合，古籍与外文旧书</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.cnki.net/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">中国知网</span><span class="desc">工具书、年鉴、学位论文</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.wanfangdata.com.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">万方数据</span><span class="desc">学位论文、标准</span></span><span class="arrow">›</span></a>
+  </ul>
+</section>
+
+<section>
+  <h2>④ 免费正版教材库</h2>
+  <ul style="list-style:none;margin:0;padding:0">
+    <a class="link" href="https://www.ncpssd.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">国家哲学社会科学文献中心</span><span class="desc">注册免费，社科图书期刊最多</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://higher.smartedu.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">国家高等教育智慧教育平台</span><span class="desc">官方课程＋配套教材资源，免费</span></span><span class="arrow">›</span></a>
+    <a class="link" href="http://www.nlc.cn/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">中国国家图书馆</span><span class="desc">办电子读者证后可远程阅览</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://openstax.org/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">OpenStax</span><span class="desc">英文大学基础课教材，免费下载 PDF</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://libretexts.org/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">LibreTexts</span><span class="desc">理工科开放教材，按章节在线阅读</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://open.umn.edu/opentextbooks" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Open Textbook Library</span><span class="desc">有同行评审的开放教材目录</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.doabooks.org/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">DOAB / OAPEN</span><span class="desc">开放获取学术图书，含新版专著</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://archive.org/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Internet Archive</span><span class="desc">老版教材、扫描本，可借阅</span></span><span class="arrow">›</span></a>
+  </ul>
+</section>
+
+<section>
+  <h2>⑤ 外文教材（走学校订阅）</h2>
+  <ul style="list-style:none;margin:0;padding:0">
+    <a class="link" href="https://ebookcentral.proquest.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">ProQuest Ebook Central</span><span class="desc">教材最全，多数高校有</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://link.springer.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">SpringerLink</span><span class="desc">理工科教材与专著</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://onlinelibrary.wiley.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Wiley Online Library</span><span class="desc">经管、工程类教材</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.oreilly.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">O'Reilly</span><span class="desc">计算机教材几乎全覆盖</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.sciencedirect.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">ScienceDirect</span><span class="desc">Elsevier 教材与参考书</span></span><span class="arrow">›</span></a>
+  </ul>
+</section>
+
+<section>
+  <h2>⑥ 中文平台 & 二手书</h2>
+  <ul style="list-style:none;margin:0;padding:0">
+    <a class="link" href="https://weread.qq.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">微信读书</span><span class="desc">不少高教社/机工社教材有正版电子版</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://e.jd.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">京东读书</span><span class="desc">可先试读前几章再决定</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://i.chaoxing.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">超星学习通</span><span class="desc">课程配套教材与讲义</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://book.douban.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">豆瓣读书</span><span class="desc">查 ISBN、版本、哪年出的</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.duozhuayu.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">多抓鱼</span><span class="desc">二手教材，常常比找 PDF 快</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://www.kongfz.com/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">孔夫子旧书网</span><span class="desc">绝版、旧版教材</span></span><span class="arrow">›</span></a>
+  </ul>
+</section>
+
+<section>
+  <h2>⑦ 补充渠道（自担风险）</h2>
+  <p class="tip">最新版基本没有，适合补旧版和经典书。版权有争议，学校买了的资源优先用。</p>
+  <ul style="list-style:none;margin:0;padding:0">
+    <a class="link" href="https://annas-archive.org/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Anna's Archive</span><span class="desc">聚合多个库，比单站全</span></span><span class="arrow">›</span></a>
+    <a class="link" href="https://libgen.is/" target="_blank" rel="noopener">
+      <span class="txt"><span class="name">Library Genesis</span><span class="desc">外文教材旧版</span></span><span class="arrow">›</span></a>
+  </ul>
+</section>
+
+<footer>
+  <p><b>怎么用：</b>先点①检测，绿点那个就是今天的入口；找书按②搜；教材按③→④→⑤查，最后才用⑦。</p>
+  <p><b>加到主屏幕：</b>浏览器菜单 → "添加到主屏幕"，桌面就有图标。</p>
+  <p><b>最新版为什么难找：</b>出版社数字版通常比纸质晚几个月到一年，最新版多半只给机构订阅或教师授权，影子库多是旧版扫描。</p>
+</footer>
+
+<script>
+function copyEmail(){
+  var t='blackbox@zbox.ph';
+  var done=function(){var b=document.getElementById('copy');b.textContent='已复制';
+    setTimeout(function(){b.textContent='复制邮箱'},1500)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,function(){prompt('手动复制：',t)});
+  }else{prompt('手动复制：',t)}
+}
+function go(kind){
+  var q=document.getElementById('q').value.trim();
+  if(!q){document.getElementById('q').focus();return}
+  var e=encodeURIComponent(q);
+  var map={
+    zlib:'https://z-library.sk/s/'+e,
+    anna:'https://annas-archive.org/search?q='+e,
+    gs:'https://scholar.google.com/scholar?q='+e,
+    bd:'https://xueshu.baidu.com/s?wd='+e
+  };
+  window.open(map[kind],'_blank','noopener');
+}
+document.getElementById('q').addEventListener('keydown',function(ev){
+  if(ev.key==='Enter'){go('zlib')}
+});
+
+function probeFetch(url){
+  return new Promise(function(resolve){
+    var done=false,fin=function(ok){if(!done){done=true;resolve(ok)}};
+    var ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var tm=setTimeout(function(){if(ctl){try{ctl.abort()}catch(e){}}fin(false)},4500);
+    try{
+      fetch(url,{mode:'no-cors',cache:'no-store',redirect:'follow',
+        signal:ctl?ctl.signal:undefined})
+        .then(function(){clearTimeout(tm);fin(true)})
+        .catch(function(){clearTimeout(tm);fin(false)});
+    }catch(e){clearTimeout(tm);fin(false)}
+  });
+}
+function probeImg(url){
+  return new Promise(function(resolve){
+    var img=new Image(),done=false;
+    var fin=function(ok){if(!done){done=true;img.src='';resolve(ok)}};
+    var tm=setTimeout(function(){fin(false)},4500);
+    img.onload=function(){clearTimeout(tm);fin(true)};
+    img.onerror=function(){clearTimeout(tm);fin(false)};
+    img.src=url+'favicon.ico?t='+Date.now();
+  });
+}
+function probe(url){
+  // 两种探测都试：网络请求通了、或图标能加载，任一成功即视为可访问
+  return Promise.all([probeFetch(url),probeImg(url)]).then(function(r){
+    return r[0]||r[1];
+  });
+}
+document.getElementById('check').onclick=function(){
+  var btn=this;
+  var dots=Array.prototype.slice.call(document.querySelectorAll('[data-detect]'));
+  var sum=document.getElementById('sum');
+  btn.disabled=true;btn.textContent='检测中…';sum.textContent='';
+  var done=0,okList=[];
+  dots.forEach(function(d){
+    d.className='dot';
+    probe(d.dataset.detect).then(function(ok){
+      d.className='dot '+(ok?'ok':'bad');
+      if(ok){okList.push(d.dataset.detect.replace('https://','').replace(/\/$/,''))}
+      if(++done===dots.length){
+        btn.disabled=false;btn.textContent='重新检测';
+        sum.innerHTML = okList.length
+          ? '现在能连上 <b>'+okList.length+'</b> 个：'+okList.join('、')
+          : '一个都连不上——换网络（关掉 Wi-Fi 用流量）再点一次，或用下面的神奇邮箱。';
+      }
+    });
+  });
+};
+</script>
+</body>
+</html>
